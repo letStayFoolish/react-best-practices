@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { fetchData } from "../api/fetchData.ts";
 
 export interface Post {
   id: number;
@@ -8,22 +9,11 @@ export interface Post {
 }
 
 export const useFetchData = () => {
+  console.log("Hook useFetchData is called!");
   const [fetchedPosts, setFetchedPosts] = useState<Post[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await fetch("https://jsonplaceholder.typicode.com/posts");
-
-        const jsonData = await res.json();
-
-        setFetchedPosts(jsonData);
-      } catch (error: any) {
-        console.error(error);
-      }
-    };
-
-    fetchData();
+    fetchData(setFetchedPosts);
   }, []);
 
   return { fetchedPosts, setFetchedPosts };
