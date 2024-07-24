@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useFetchData } from "./hooks/useFetchData.ts";
+import Button from "./components/Button.tsx";
+import PostList from "./components/PostList.tsx";
+import { useState } from "react";
 
-function App() {
-  const [count, setCount] = useState(0)
+export default function App() {
+  console.log("Rendering App!");
+
+  const [counter, setCounter] = useState<number>(0);
+
+  const { fetchedPosts } = useFetchData();
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <main className="bg-stone-900 antialiased text-stone-50 min-h-screen flex flex-col text-center px-2 py-5  mx-auto">
+      <h1 className="text-5xl font-extrabold uppercase">Application</h1>
 
-export default App
+      <div className=" w-full mx-auto flex text-2xl justify-start items-center font-extrabold text-white">
+        <div>
+          Counter: <span className="ml-6 text-4xl">{counter}</span>
+        </div>
+        <Button handleOnClick={() => setCounter((prevState) => prevState + 1)}>
+          Add
+        </Button>
+      </div>
+
+      <section>
+        <h2>Fetched Data:</h2>
+        <PostList fetchedPosts={fetchedPosts} />
+      </section>
+
+      <Button handleOnClick={() => {}}>Click me!</Button>
+    </main>
+  );
+}
