@@ -11,24 +11,32 @@ export default function App() {
   const { fetchedPosts } = useFetchData();
 
   return (
-    <main className="bg-stone-900 antialiased text-stone-50 min-h-screen flex flex-col text-center px-2 py-5  mx-auto">
+    <main className="bg-gray-900 antialiased text-gray-50 min-h-screen flex flex-col text-center p-5 mx-auto">
       <h1 className="text-5xl font-extrabold uppercase">Application</h1>
 
-      <div className=" w-full mx-auto flex text-2xl justify-start items-center font-extrabold text-white">
+      <div className="w-full mx-auto flex text-2xl justify-start items-center font-extrabold text-white">
         <div>
           Counter: <span className="ml-6 text-4xl">{counter}</span>
         </div>
-        <Button handleOnClick={() => setCounter((prevState) => prevState + 1)}>
+        <Button
+          className="ml-4 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md"
+          handleOnClick={() => setCounter((prevState) => prevState + 1)}
+        >
           Add
         </Button>
       </div>
 
-      <section>
-        <h2>Fetched Data:</h2>
+      <section className="mx-auto w-full mt-8">
+        <h2 className="text-4xl mb-8">Fetched Data:</h2>
         <PostList fetchedPosts={fetchedPosts} />
       </section>
 
-      <Button handleOnClick={() => {}}>Click me!</Button>
+      <Button
+        className="mt-8 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md"
+        handleOnClick={() => {}}
+      >
+        Click me!
+      </Button>
     </main>
   );
 }
