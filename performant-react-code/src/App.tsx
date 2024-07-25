@@ -1,7 +1,8 @@
-import { useFetchData } from "./hooks/useFetchData.ts";
+import { Post, useFetchData } from "./hooks/useFetchData.ts";
 import Button from "./components/Button.tsx";
 import PostList from "./components/PostList.tsx";
 import { useState } from "react";
+import SelectedPost from "./components/SelectedPost.tsx";
 
 export default function App() {
   console.log("Rendering App!");
@@ -9,6 +10,14 @@ export default function App() {
   const [counter, setCounter] = useState<number>(0);
 
   const { fetchedPosts } = useFetchData();
+
+  const [selectedPost, setSelectedPost] = useState<Post>(fetchedPosts[0]);
+
+  function onSelectPost() {
+    const index = Math.floor(Math.random() * 10) + 1;
+
+    setSelectedPost(fetchedPosts[index]);
+  }
 
   return (
     <main className="bg-gray-900 antialiased text-gray-50 min-h-screen flex flex-col text-center p-5 mx-auto">
@@ -33,10 +42,12 @@ export default function App() {
 
       <Button
         className="mt-8 py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg shadow-md"
-        handleOnClick={() => {}}
+        handleOnClick={onSelectPost}
       >
-        Click me!
+        Select One Post
       </Button>
+
+      {selectedPost ? <SelectedPost post={selectedPost} /> : null}
     </main>
   );
 }
