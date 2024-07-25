@@ -1,7 +1,7 @@
 import { Post, useFetchData } from "./hooks/useFetchData.ts";
 import Button from "./components/Button.tsx";
 import PostList from "./components/PostList.tsx";
-import { useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import SelectedPost from "./components/SelectedPost.tsx";
 
 export default function App() {
@@ -13,11 +13,41 @@ export default function App() {
 
   const [selectedPost, setSelectedPost] = useState<Post>(fetchedPosts[0]);
 
-  function onSelectPost() {
+  const onSelectPost = useCallback(() => {
     const index = Math.floor(Math.random() * 10) + 1;
 
     setSelectedPost(fetchedPosts[index]);
-  }
+  }, [fetchedPosts]);
+
+  /**
+   * Rule #1
+   * If the only reason you want to extract your inline functions
+   * in props into useCallback is to avoid re-renders of children components: don’t.
+   * It doesn’t work.
+   */
+
+  // const list = useMemo(() => {
+  //   return <CountriesList counter={counter} />;
+  // }, [counter]);
+
+  /**
+   * Rule #2
+   * If your component manages state,
+   * find parts of the render tree that don’t depend on the changed state and memoise them to minimize their re-renders.
+   * */
+
+  /**
+   * Rule #4: When using context, make sure that value property is always memoised if it’s not a number, string or boolean.
+   * */
+
+  // Memoization to avoid re-render of children if parent got re-rendered
+  const singlePost = useMemo(() => {
+    return <SelectedPost post={selectedPost} />;
+  }, [selectedPost]);
+
+  const list = useMemo(() => {
+    return <PostList posts={fetchedPosts} />;
+  }, [fetchedPosts]);
 
   return (
     <main className="bg-gray-900 antialiased text-gray-50 min-h-screen flex flex-col text-center p-5 mx-auto">
@@ -37,7 +67,12 @@ export default function App() {
 
       <section className="mx-auto w-full mt-8">
         <h2 className="text-4xl mb-8">Fetched Data:</h2>
-        <PostList fetchedPosts={fetchedPosts} />
+
+        {/* Before memoization */}
+        {/*<PostList posts={fetchedPosts} />*/}
+
+        {/* After memoization */}
+        {list}
       </section>
 
       <Button
@@ -47,7 +82,11 @@ export default function App() {
         Select One Post
       </Button>
 
-      {selectedPost ? <SelectedPost post={selectedPost} /> : null}
+      {/* Before memoization */}
+      {/*<PostList fetchedPosts={fetchedPosts} />*/}
+
+      {/* After memoization */}
+      {singlePost}
     </main>
   );
 }
